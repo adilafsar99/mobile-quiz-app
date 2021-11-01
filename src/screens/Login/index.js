@@ -1,38 +1,71 @@
-import React, {useState} from 'react';
-import {View, Text, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
+import React, {
+  useState
+} from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  ActivityIndicator,
+  StyleSheet
+} from 'react-native';
+import {
+  auth,
+  signInWithEmailAndPassword
+} from '../../config/Firebase/Firebase.js';
 
-const Login = ({navigation}) => {
+const Login = ({
+  navigation
+}) => {
+  const [email,
+    setEmail] = useState('');
+  const [password,
+    setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const login = () => {
+    setIsLoading(true);
+    signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      setIsLoading(false);
+      alert("Logged in.");
+      navigation.navigate('QuizList');
+    })
+    .catch((error) => {
+      setIsLoading(false)
+      alert(error.message);
+    })
+  }
   return(
     <View>
       <View>
-        <Text style={styles.title} >
+        <Text style={styles.title}>
           Login
         </Text>
-        <Text style={styles.subtitle} >
+        <Text style={styles.subtitle}>
           Add your details to login
         </Text>
       </View>
       <View style={styles.inputContainer}>
-        <TextInput keyboardType="email-address" maxLength={30} autoFocus={true} placeholder="Your Email" style={styles.input} />
-        <TextInput secureTextEntry={true} maxLength={14} placeholder="Password" style={styles.input} />
+        <TextInput value={email} onChange={(e) => setEmail(e.target.value)} keyboardType="email-address" maxLength={30} autoFocus={true} placeholder="Your Email" style={styles.input} />
+        <TextInput value={password} onChange={(e) => setPassword(e.target.value)} secureTextEntry={true} maxLength={14} placeholder="Password" style={styles.input} />
       </View>
-      <View style={styles.buttonContainer} >
-        <TouchableOpacity onPress={() => navigation.navigate('QuizList')} activeOpacity={0.7} >
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity onPress={() => login()} activeOpacity={0.7}>
           <Text style={styles.button}>
-            Login
+            {isLoading ? <ActivityIndicator color="#fff" size="large" />: "Login"}
           </Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.forgotPasswordLink} >
-        <Text style={{color: "#7d7d7d"}} >
-          <a onClick={() => navigation.navigate('ResetPassword')} >Forgot password?</a>
+      <View style={styles.forgotPasswordLink}>
+        <Text style={ { color: "#7d7d7d" }}>
+          <a onClick={() => navigation.navigate('ResetPassword')}>Forgot password?</a>
         </Text>
       </View>
       <View>
         <Text style={styles.signupText}>
           Don't have an Account?&nbsp;
           <a onClick={() => navigation.navigate('Signup')}>
-            <Text style={styles.signupLink} >Sign Up</Text>
+            <Text style={styles.signupLink}>Sign Up</Text>
           </a>
         </Text>
       </View>
@@ -74,12 +107,14 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   button: {
+    display: "flex",
     width: "100%",
     height: 70,
     textAlign: "center",
     color: "#fff",
     backgroundColor: "#000",
-    paddingVertical: 25,
+    alignItems: "center",
+    justifyContent: "space-around",
     borderRadius: 40,
     fontSize: 16,
     backgroundColor: "#39eb9a"

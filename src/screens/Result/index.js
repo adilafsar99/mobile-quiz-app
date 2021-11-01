@@ -14,8 +14,8 @@ const Result = ({navigation}) => {
         </Text>
       </View>
       <View>
-        <View>
-          <Image source={{uri: DEFAULT}} />
+        <View style={styles.userPicContainer} >
+          <Image resizeMode="contain" style={styles.userPic} source={{uri: DEFAULT}} />
         </View>
         <View>
           
@@ -23,12 +23,12 @@ const Result = ({navigation}) => {
       </View>
         <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={() => navigation.navigate('Login')} activeOpacity={0.7}>
-          <Text style={styles.button}>
+          <Text style={styles.button} >
             Retry
           </Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('Login')} activeOpacity={0.7}>
-          <Text style={styles.button}>
+          <Text style={styles.button} >
             Back to list
           </Text>
         </TouchableOpacity>
@@ -64,13 +64,22 @@ const styles = StyleSheet.create({
     marginBottom: 25,
     paddingHorizontal: 20
   },
+  userPicContainer: {
+    width: "80%",
+    borderRadius: 100,
+    marginHorizontal: "auto",
+    paddingHorizontal: 40,
+    backgroundColor: "#000"
+  },
+  userPic: {
+    width: 200,
+    height: 200
+  },
   buttonContainer: {
     width: "85%",
     marginHorizontal: "auto",
     marginTop: 10,
     marginBottom: 20,
-    display: "flex",
-    flexWrap: "no-wrap"
   },
   button: {
     width: "40%",
@@ -81,7 +90,9 @@ const styles = StyleSheet.create({
     paddingVertical: 25,
     borderRadius: 40,
     fontSize: 16,
-    backgroundColor: "#39eb9a"
+    backgroundColor: "#39eb9a",
+    marginHorizontal: "auto",
+    marginVertical: 5
   }
 });
 

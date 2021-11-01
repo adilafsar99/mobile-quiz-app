@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -10,12 +10,19 @@ import {
 const Questions = ({
   navigation
 }) => {
+  const [timer, setTimer] = useState(300);
+  setInterval(() => {
+    setTimer(timer - 1);
+  }, 1000)
   return(
     <ScrollView>
     <View>
       <View>
         <Text style={styles.title}>
           Questions
+        </Text>
+        <Text style={styles.timer} >
+          {timer}
         </Text>
         <Text style={styles.subtitle}>
           Question 1
@@ -55,8 +62,17 @@ const styles = StyleSheet.create({
     width: "100%",
     color: "#767e80",
     fontSize: 45,
-    padding: 10,
     textAlign: "center"
+  },
+  timer: {
+    width: "20%",
+    marginHorizontal: "auto",
+    borderRadius: 20,
+    color: "#fff",
+    fontSize: 16,
+    padding: 5,
+    textAlign: "center",
+    backgroundColor: "#39eb9a"
   },
   subtitle: {
     width: "100%",
@@ -98,7 +114,6 @@ const styles = StyleSheet.create({
     height: 70,
     textAlign: "center",
     color: "#fff",
-    backgroundColor: "#000",
     paddingVertical: 25,
     borderRadius: 40,
     fontSize: 16,

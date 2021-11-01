@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   Button,
+  ActivityIndicator,
   StyleSheet
 } from 'react-native';
 import {
@@ -25,14 +26,18 @@ const Signup = ({
    const [confirmPassword, setConfirmPassword] = useState('');
    const [isLoading, setIsLoading] = useState(false);
    const register = () => {
-    const user = {name, email}
     setIsLoading(true);
     createUserWithEmailAndPassword(auth, email, password)
     .then(async (userCredential) => {
       alert("Authenticated");
+      const user = {
+        name: name,
+        email: email,
+        uid: userCredential.user.uid
+      }
       const usersCol = collection(db, "users");
       const userDoc = doc(usersCol, `${userCredential.user.uid}`);
-      await setDoc(userDoc, {name, email});
+      await setDoc(userDoc, user);
       setIsLoading(false);
       alert("Registered.");
       navigation.navigate('Login');
@@ -61,7 +66,7 @@ const Signup = ({
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={() => register()} activeOpacity={0.7}>
           <Text style={styles.button}>
-            Sign Up
+            {isLoading ? <ActivityIndicator color="#fff" size="large" /> : "Sign Up"}
           </Text>
         </TouchableOpacity>
       </View>
@@ -111,12 +116,14 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   button: {
+    display: "flex",
     width: "100%",
     height: 70,
     textAlign: "center",
     color: "#fff",
     backgroundColor: "#000",
-    paddingVertical: 25,
+    alignItems: "center",
+    justifyContent: "space-around",
     borderRadius: 40,
     fontSize: 16,
     backgroundColor: "#39eb9a"
