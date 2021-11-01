@@ -1,11 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
 
-const ResetPassword = ({setShowNewPassword, setShowResetPassword}) => {
-  const showNewPassword = () => {
-    setShowNewPassword(true);
-    setShowResetPassword(false);
-  };
+const ResetPassword = ({navigation}) => {
   return(
     <View>
       <View>
@@ -20,7 +16,7 @@ const ResetPassword = ({setShowNewPassword, setShowResetPassword}) => {
         <TextInput secureTextEntry={true} maxLength={14} autoFocus={true} placeholder="Email" style={styles.input} />
       </View>
       <View style={styles.buttonContainer} >
-        <TouchableOpacity onPress={() => showNewPassword()} activeOpacity={0.7} >
+        <TouchableOpacity onPress={() => navigation.navigate('ChangePassword')} activeOpacity={0.7} >
           <Text style={styles.button}>
             Send
           </Text>

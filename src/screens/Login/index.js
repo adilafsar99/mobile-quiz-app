@@ -1,15 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
 
-const Login = ({setShowSignup, setShowLogin, setShowResetPassword}) => {
-  const showSignup = () => {
-    setShowSignup(true);
-    setShowLogin(false);
-  };
-  const showResetPassword = () => {
-    setShowResetPassword(true);
-    setShowLogin(false);
-  };
+const Login = ({navigation}) => {
   return(
     <View>
       <View>
@@ -25,7 +17,7 @@ const Login = ({setShowSignup, setShowLogin, setShowResetPassword}) => {
         <TextInput secureTextEntry={true} maxLength={14} placeholder="Password" style={styles.input} />
       </View>
       <View style={styles.buttonContainer} >
-        <TouchableOpacity activeOpacity={0.7} >
+        <TouchableOpacity onPress={() => navigation.navigate('QuizList')} activeOpacity={0.7} >
           <Text style={styles.button}>
             Login
           </Text>
@@ -33,13 +25,13 @@ const Login = ({setShowSignup, setShowLogin, setShowResetPassword}) => {
       </View>
       <View style={styles.forgotPasswordLink} >
         <Text style={{color: "#7d7d7d"}} >
-          <a onClick={() => showResetPassword()} >Forgot password?</a>
+          <a onClick={() => navigation.navigate('ResetPassword')} >Forgot password?</a>
         </Text>
       </View>
       <View>
         <Text style={styles.signupText}>
           Don't have an Account?&nbsp;
-          <a onClick={() => showSignup()}>
+          <a onClick={() => navigation.navigate('Signup')}>
             <Text style={styles.signupLink} >Sign Up</Text>
           </a>
         </Text>

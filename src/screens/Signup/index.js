@@ -1,21 +1,47 @@
-import React, {
-  useState
-} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
+  Button,
   StyleSheet
 } from 'react-native';
+import {
+  auth,
+  createUserWithEmailAndPassword,
+  db,
+  collection,
+  doc,
+  setDoc
+} from "../../config/Firebase/Firebase.js";
 
 const Signup = ({
-  setShowSignup, setShowLogin
+  navigation
 }) => {
-  const showLogin = () => {
-    setShowLogin(true);
-    setShowSignup(false);
-  };
+   const [name, setName] = useState('');
+   const [email, setEmail] = useState('');
+   const [password, setPassword] = useState('');
+   const [confirmPassword, setConfirmPassword] = useState('');
+   const [isLoading, setIsLoading] = useState(false);
+   const register = () => {
+    const user = {name, email}
+    setIsLoading(true);
+    createUserWithEmailAndPassword(auth, email, password)
+    .then(async (userCredential) => {
+      alert("Authenticated");
+      const usersCol = collection(db, "users");
+      const userDoc = doc(usersCol, `${userCredential.user.uid}`);
+      await setDoc(userDoc, {name, email});
+      setIsLoading(false);
+      alert("Registered.");
+      navigation.navigate('Login');
+    })
+    .catch((error) => {
+      setIsLoading(false);
+      alert(error.message);
+    })
+  }
   return(
     <View>
       <View>
@@ -27,13 +53,13 @@ const Signup = ({
         </Text>
       </View>
       <View style={styles.inputContainer}>
-        <TextInput maxLength={30} autoFocus={true} placeholder="Name" style={styles.input} />
-        <TextInput maxLength={30} keyboardType="email-address" placeholder="Email" style={styles.input} />
-        <TextInput secureTextEntry={true} maxLength={14} placeholder="Password" style={styles.input} />
-        <TextInput secureTextEntry={true} maxLength={14} placeholder="Confirm Password" style={styles.input} />
+        <TextInput value={name} onChange={(e) => setName(e.target.value)} maxLength={30} autoFocus={true} placeholder="Name" style={styles.input} />
+        <TextInput value={email} onChange={(e) => setEmail(e.target.value)} maxLength={30} keyboardType="email-address" placeholder="Email" style={styles.input} />
+        <TextInput value={password} onChange={(e) => setPassword(e.target.value)} secureTextEntry={true} maxLength={14} placeholder="Password" style={styles.input} />
+        <TextInput value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} secureTextEntry={true} maxLength={14} placeholder="Confirm Password" style={styles.input} />
       </View>
-      <View style={styles.buttonContainer} >
-        <TouchableOpacity onPress={() => showLogin()} activeOpacity={0.7}>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity onPress={() => register()} activeOpacity={0.7}>
           <Text style={styles.button}>
             Sign Up
           </Text>
@@ -42,8 +68,8 @@ const Signup = ({
       <View>
         <Text style={styles.loginText}>
           Already have an Account?&nbsp;
-          <a onClick={() => showLogin()}>
-            <Text style={styles.loginLink} >Login</Text>
+          <a onClick={() => navigation.navigate('Login')}>
+            <Text style={styles.loginLink}>Login</Text>
           </a>
         </Text>
       </View>

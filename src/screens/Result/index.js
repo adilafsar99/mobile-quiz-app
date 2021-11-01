@@ -1,27 +1,35 @@
-import React, {useState} from 'react';
-import {View, Text, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
+import React from 'react';
+import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
+import DEFAULT from '../../assets/images/logo.png';
 
-const NewPassword = ({navigation}) => {
+const Result = ({navigation}) => {
   return(
     <View>
       <View>
-        <Text style={styles.title} >
-          New Password
+        <Text style={styles.title}>
+          Result
+        </Text>
+        <Text style={styles.subtitle}>
+          The result of your choices
         </Text>
       </View>
       <View>
-        <Text style={styles.subtitle} >
-          Enter new password to replace your old one
-        </Text>
+        <View>
+          <Image source={{uri: DEFAULT}} />
+        </View>
+        <View>
+          
+        </View>
       </View>
-      <View style={styles.inputContainer}>
-        <TextInput secureTextEntry={true} maxLength={14} autoFocus={true} placeholder="New Password" style={styles.input} />
-        <TextInput secureTextEntry={true} maxLength={14} placeholder="Confirm Password" style={styles.input} />
-      </View>
-      <View style={styles.buttonContainer} >
-        <TouchableOpacity onPress={() => navigation.navigate('Login')} activeOpacity={0.7} >
+        <View style={styles.buttonContainer}>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')} activeOpacity={0.7}>
           <Text style={styles.button}>
-            Change Password
+            Retry
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')} activeOpacity={0.7}>
+          <Text style={styles.button}>
+            Back to list
           </Text>
         </TouchableOpacity>
       </View>
@@ -44,12 +52,12 @@ const styles = StyleSheet.create({
     padding: 5,
     textAlign: "center"
   },
-  inputContainer: {
+  resultContainer: {
     width: "80%",
     marginHorizontal: "auto",
     marginTop: 20
   },
-  input: {
+  result: {
     height: 60,
     backgroundColor: "#e7e7e7",
     borderRadius: 25,
@@ -60,10 +68,12 @@ const styles = StyleSheet.create({
     width: "85%",
     marginHorizontal: "auto",
     marginTop: 10,
-    marginBottom: 20
+    marginBottom: 20,
+    display: "flex",
+    flexWrap: "no-wrap"
   },
   button: {
-    width: "100%",
+    width: "40%",
     height: 70,
     textAlign: "center",
     color: "#fff",
@@ -72,7 +82,7 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     fontSize: 16,
     backgroundColor: "#39eb9a"
-  },
+  }
 });
 
-export default NewPassword;
+export default Result;
