@@ -1,4 +1,7 @@
-import React, {useState, useEffect} from 'react';
+import React, {
+  useState,
+  useEffect
+} from 'react';
 import {
   View,
   Text,
@@ -6,46 +9,45 @@ import {
   ScrollView,
   StyleSheet
 } from 'react-native';
+import {
+  useDispatch,
+  useSelector
+} from 'react-redux';
 
 const Questions = ({
   navigation
 }) => {
-  const [timer, setTimer] = useState(300);
+  const questionObj = useSelector(state => state.questions.questions[0][0]);
+  const [timer,
+    setTimer] = useState(300);
   setInterval(() => {
-    setTimer(timer - 1);
-  }, 1000)
+    //setTimer(timer - 1);
+  }, 1000);
   return(
     <ScrollView>
     <View>
-      <View>
-        <Text style={styles.title}>
-          Questions
-        </Text>
-        <Text style={styles.timer} >
-          {timer}
-        </Text>
-        <Text style={styles.subtitle}>
-          Question 1
-        </Text>
-        <Text style={styles.question}>
-          What is the correct option?
-        </Text>
-      </View>
-      <View style={styles.optionsContainer}>
-        <Text style={styles.option}>
-          Option 1
-        </Text>
-        <Text style={styles.option}>
-          Option 2
-        </Text>
-        <Text style={styles.option}>
-          Option 3
-        </Text>
-        <Text style={styles.option}>
-          Option 4
-        </Text>
-      </View>
-      <View style={styles.buttonContainer}>
+        <View>
+          <Text style={styles.title}>
+            Questions
+          </Text>
+          <Text style={styles.timer}>
+            {timer}
+          </Text>
+          <Text style={styles.subtitle}>
+            Question 1
+          </Text>
+          <Text style={styles.question}>
+            {questionObj.question}
+          </Text>
+        </View>
+        <View style={styles.optionsContainer}>
+          {questionObj.choices.map((choice) => (
+            <Text style={styles.option}>
+              {choice}
+           </Text>
+          ))}
+        </View>
+    <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={() => navigation.navigate('Result')} activeOpacity={0.7}>
           <Text style={styles.button}>
             Next

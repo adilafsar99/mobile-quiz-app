@@ -1,8 +1,22 @@
-import React from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import React, {
+  useState,
+  useRef
+} from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet
+} from 'react-native';
 import Camera from '../../components/camera';
 
-const UserPic = ({navigation}) => {
+const UserPic = ({
+  navigation
+}) => {
+  const takePhoto = async () => {
+    //const photo = await camera.takePictureAsync();
+    navigation.navigate("Questions");
+  }
   return(
     <View>
       <View>
@@ -11,13 +25,13 @@ const UserPic = ({navigation}) => {
         </Text>
         <Text style={styles.subtitle}>
           Take your photo
-        </Text>  
+        </Text>
       </View>
       <View>
-        <Camera />
+        <Camera id="camera" />
       </View>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate('Questions')} activeOpacity={0.7}>
+        <TouchableOpacity onPress={() => takePhoto()} activeOpacity={0.7}>
           <Text style={styles.button}>
             Capture
           </Text>
@@ -46,7 +60,7 @@ const styles = StyleSheet.create({
     width: "85%",
     marginHorizontal: "auto",
     marginTop: 10,
-    marginBottom: 20
+    marginBottom: 12,
   },
   button: {
     width: "100%",

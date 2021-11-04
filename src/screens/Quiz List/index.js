@@ -1,17 +1,19 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {
   View,
   Text,
+  TouchableOpacity,
   StyleSheet
 } from 'react-native';
-import Camera from '../../components/camera';
+import {useSelector} from 'react-redux';
 
 const QuizList = ({
   navigation
 }) => {
-  const startQuiz = () => {
+  const openCamera = () => {
     navigation.navigate('UserPic')
-  }
+  };
+  const quizList = useSelector(state => state.quizList.quizList);
   return(
     <View>
       <View>
@@ -23,18 +25,13 @@ const QuizList = ({
         </Text>
       </View>
       <View style={styles.quizContainer} >
-        <Text onPress={() => startQuiz()} style={styles.quiz} >
-          General Knowledge
-        </Text>
-        <Text onPress={() => startQuiz()} style={styles.quiz} >
-          Sports
-        </Text>
-        <Text onPress={() => startQuiz()} style={styles.quiz} >
-          Web Development
-        </Text>
-        <Text onPress={() => startQuiz()} style={styles.quiz} >
-          World Affairs
-        </Text>
+        {quizList.map((quiz, i) => (
+          <TouchableOpacity activeOpacity={0.7} >
+          <Text onPress={() => openCamera()} style={styles.quiz} >
+            {quiz}
+          </Text>
+        </TouchableOpacity>
+        ))}
       </View>
     </View>
   )
@@ -62,13 +59,14 @@ const styles = StyleSheet.create({
   },
   quiz: {
     height: 60,
-    backgroundColor: "#e7e7e7",
+    backgroundColor: "#39eb9a",
     borderRadius: 25,
     marginBottom: 25,
     paddingTop: 20,
     textAlign: "center",
     fontSize: 18,
-    color: "#7d7d7d"
+    color: "#fff",
+    fontWeight: "400"
   }
 });
 

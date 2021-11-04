@@ -4,13 +4,16 @@ import { StyleSheet, View } from 'react-native';
 import {Signup, Login, ResetPassword, ChangePassword, QuizList, UserPic, Questions, Result} from './src/screens';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {Provider} from 'react-redux';
+import store from './src/store';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return(
+    <Provider store={store} >
     <NavigationContainer style={styles.container} >
-      <Stack.Navigator initialRouteName="Signup" >
+      <Stack.Navigator initialRouteName="Questions" >
         <Stack.Screen
         name="Signup"
         component={Signup}
@@ -45,6 +48,7 @@ export default function App() {
         options={{title: 'Result'}} />
       </Stack.Navigator>
     </NavigationContainer>
+    </Provider>
    )
 }
 
