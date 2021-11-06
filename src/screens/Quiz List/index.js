@@ -1,19 +1,29 @@
-import React, {useContext} from 'react';
+import React, {
+  useContext
+} from 'react';
 import {
   View,
+  ScrollView,
   Text,
   TouchableOpacity,
   StyleSheet
 } from 'react-native';
-import {useSelector} from 'react-redux';
+import {
+  useSelector,
+  useDispatch
+} from 'react-redux';
 
 const QuizList = ({
   navigation
 }) => {
-  const openCamera = () => {
-    navigation.navigate('UserPic')
+  const openCamera = (quizIndex) => {
+    dispatch({
+      type: "selectQuiz", quizIndex: quizIndex
+    });
+    navigation.navigate('UserPic');
   };
   const quizList = useSelector(state => state.quizList.quizList);
+  const dispatch = useDispatch();
   return(
     <View>
       <View>
@@ -24,14 +34,16 @@ const QuizList = ({
           Touch the quiz you want to take
         </Text>
       </View>
-      <View style={styles.quizContainer} >
+      <View style={styles.quizContainer}>
         {quizList.map((quiz, i) => (
-          <TouchableOpacity activeOpacity={0.7} >
-          <Text onPress={() => openCamera()} style={styles.quiz} >
+        <ScrollView>
+          <TouchableOpacity key={i} activeOpacity={0.7}>
+            <Text onPress={() => openCamera(i)} style={styles.quiz}>
             {quiz}
-          </Text>
-        </TouchableOpacity>
-        ))}
+            </Text>
+          </TouchableOpacity>
+        </ScrollView>
+    ))}
       </View>
     </View>
   )

@@ -4,25 +4,71 @@ import React, {
 } from 'react';
 import {
   View,
+  ScrollView,
   Text,
   TouchableOpacity,
-  ScrollView,
   StyleSheet
 } from 'react-native';
 import {
   useDispatch,
   useSelector
 } from 'react-redux';
+import CountDown from 'react-native-countdown-component';
 
 const Questions = ({
   navigation
 }) => {
-  const questionObj = useSelector(state => state.questions.questions[0][0]);
-  const [timer,
-    setTimer] = useState(300);
-  setInterval(() => {
-    //setTimer(timer - 1);
-  }, 1000);
+  const [remainingTime, setRemainingTime] = useState(180);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [isSelected, setIsSelected] = useState(null);
+  const [score, setScore] = useState(0);
+  const [skipped, setSkipped] = useState(0);
+  const [correctChoices, setCorrectChoices] = useState(0);
+  const [wrongChoices, setWrongChoices] = useState(0);
+  const [userChoices, setUserChoices] = useState([]);
+  const quizIndex = useSelector(state => state.quizList.quizIndex);
+  const questions = useSelector(state => state.questions.questions[quizIndex]);
+  const questionObj = questions[currentQuestion];
+  const dispatch = useDispatch();
+  const finishQuiz = () => {
+    dispatch({
+        type: "createResult",
+        score,
+        userChoices,
+        skipped,
+        correctChoices,
+        wrongChoices
+      });
+    setRemainingTime(180);
+    setCurrentQuestion(0);
+    setIsSelected(null);
+    navigation.navigate('Result');
+  }
+  const changeQuestion = () =>  {
+    if (isSelected === null) {
+      setSkipped(skipped + 1);
+    }
+    else if (questionObj.choices[isSelected] === questionObj.correctChoice) {
+      setScore(score + 10);
+      setCorrectChoices(correctChoices + 1);
+    }
+    else {
+      setWrongChoices(wrongChoices + 1);
+    }
+    const arr = [...userChoices];
+    isSelected !== null && arr.push({
+      choice: questionObj.choices[isSelected],
+      result: questionObj.choices[isSelected] === questionObj.correctChoice
+    });
+    setUserChoices(arr);
+    if (currentQuestion + 1 < questions.length) {
+      setIsSelected(null);
+      setCurrentQuestion(currentQuestion + 1);
+    }
+    else {
+      finishQuiz();
+    }
+  };
   return(
     <ScrollView>
     <View>
@@ -30,27 +76,36 @@ const Questions = ({
           <Text style={styles.title}>
             Questions
           </Text>
-          <Text style={styles.timer}>
-            {timer}
-          </Text>
+          <CountDown
+            size={20}
+            until={remainingTime}
+            onFinish={() => finishQuiz()}
+            digitStyle={{backgroundColor: '#fff', borderWidth: 2, borderColor: '#1cc625'}}
+            digitTxtStyle={{color: '#1cc625'}}
+            timeLabelStyle={{color: 'red', fontWeight: 'bold'}}
+            separatorStyle={{color: '#1CC625'}}
+            timeToShow={['M', 'S']}
+            timeLabels={{m: null, s: null}}
+            showSeparator
+          />
           <Text style={styles.subtitle}>
-            Question 1
+            Question {currentQuestion + 1}
           </Text>
           <Text style={styles.question}>
             {questionObj.question}
           </Text>
         </View>
         <View style={styles.optionsContainer}>
-          {questionObj.choices.map((choice) => (
-            <Text style={styles.option}>
-              {choice}
-           </Text>
+          {questionObj.choices.map((choice, i) => (
+            <TouchableOpacity activeOpacity={0.7} onPress={() => setIsSelected(i)} style={isSelected === i ? styles.selectedOption : styles.option} key={i}>
+              <Text style={{color: "#7d7d7d", fontSize: 18}} >{choice}</Text>
+           </TouchableOpacity>
           ))}
         </View>
     <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate('Result')} activeOpacity={0.7}>
+        <TouchableOpacity onPress={() => changeQuestion()} activeOpacity={0.7}>
           <Text style={styles.button}>
-            Next
+            {currentQuestion + 1 === questions.length ? "Submit" : "Next"}
           </Text>
         </TouchableOpacity>
       </View>
@@ -96,14 +151,23 @@ const styles = StyleSheet.create({
     marginTop: 20
   },
   option: {
-    height: 60,
+    paddingHorizontal: 10,
+    paddingVertical: 20,
     backgroundColor: "#e7e7e7",
+    borderRadius: 25,
+    marginBottom: 25,
+    textAlign: "center",
+    alignItems: "center"
+  },
+  selectedOption: {
+    paddingHorizontal: 10,
+    paddingVertical: 20,
+    backgroundColor: "#000",
     borderRadius: 25,
     marginBottom: 25,
     paddingTop: 20,
     textAlign: "center",
-    fontSize: 18,
-    color: "#7d7d7d"
+    alignItems: "center",
   },
   buttonContainer: {
     width: "85%",

@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 import {
   View,
+  ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
@@ -46,8 +47,10 @@ const Login = ({
         </Text>
       </View>
       <View style={styles.inputContainer}>
+        <ScrollView>
         <TextInput value={email} onChange={(e) => setEmail(e.target.value)} keyboardType="email-address" maxLength={30} autoFocus={true} placeholder="Your Email" style={styles.input} />
         <TextInput value={password} onChange={(e) => setPassword(e.target.value)} secureTextEntry={true} maxLength={14} placeholder="Password" style={styles.input} />
+        </ScrollView>
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={() => login()} activeOpacity={0.7}>
@@ -127,7 +130,7 @@ const styles = StyleSheet.create({
     color: "#7d7d7d"
   },
   signupLink: {
-    fontWeight: "bolder",
+    fontWeight: "400",
     color: "#08ad69"
   }
 });

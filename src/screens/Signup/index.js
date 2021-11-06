@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {
   View,
+  ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
@@ -58,10 +59,12 @@ const Signup = ({
         </Text>
       </View>
       <View style={styles.inputContainer}>
+        <ScrollView>
         <TextInput value={name} onChange={(e) => setName(e.target.value)} maxLength={30} autoFocus={true} placeholder="Name" style={styles.input} />
         <TextInput value={email} onChange={(e) => setEmail(e.target.value)} maxLength={30} keyboardType="email-address" placeholder="Email" style={styles.input} />
         <TextInput value={password} onChange={(e) => setPassword(e.target.value)} secureTextEntry={true} maxLength={14} placeholder="Password" style={styles.input} />
         <TextInput value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} secureTextEntry={true} maxLength={14} placeholder="Confirm Password" style={styles.input} />
+        </ScrollView>
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={() => register()} activeOpacity={0.7}>
@@ -132,7 +135,7 @@ const styles = StyleSheet.create({
     color: "#7d7d7d"
   },
   loginLink: {
-    fontWeight: "bolder",
+    fontWeight: "400",
     color: "#08ad69"
   }
 });
